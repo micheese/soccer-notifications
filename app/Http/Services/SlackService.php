@@ -83,8 +83,8 @@ class SlackService implements SlackServiceInterface
                 $awayTeam = array_get($fixture, 'team_season_away_name');
                 $awayTeamFlag = array_get($this->flags, $awayTeam, ':flags:');
 
-                $gameTime = new \DateTime(array_get($fixture, 'schedule_date'), new \DateTimeZone('UTC'));
-                $gameTime->setTimezone(new \DateTimeZone('EST'));
+                $gameTime = new \DateTime(array_get($fixture, 'schedule_date'), new \DateTimeZone('GMT+3'));
+                $gameTime->setTimezone(new \DateTimeZone('ADT'));
                 $gameTime = $gameTime->format('H:i');
 
                 $text = "Today will play : $homeTeam $homeTeamFlag vs $awayTeam $awayTeamFlag at $gameTime";

@@ -47,8 +47,8 @@ class FetchUpcomingGames extends Command
         $dateFrom = date("Y-m-d");
         $dateTo = date("Y-m-d") . 'T23:59';
 
-        $dateFrom = '2018-06-14';
-        $dateTo = '2018-06-14' . 'T23:59';
+//        $dateFrom = '2018-06-14';
+//        $dateTo = '2018-06-14' . 'T23:59';
         $this->slackService->postUpcomingGames($dateFrom, $dateTo);
     }
 }
