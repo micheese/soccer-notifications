@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\FetchLiveGames;
 use App\Console\Commands\FetchUpcomingGames;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -14,7 +15,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        FetchUpcomingGames::class
+        FetchUpcomingGames::class,
+        FetchLiveGames::class
     ];
 
     /**
@@ -26,6 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('worldcup:daily-schedule')->dailyAt('06:00');
+        $schedule->command('worldcup:live')->everyMinute();
     }
 
     /**

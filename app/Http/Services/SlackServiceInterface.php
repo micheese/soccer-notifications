@@ -11,4 +11,6 @@ interface SlackServiceInterface
      * @return bool
      */
     public function postUpcomingGames($dateFrom, $dateTo);
+
+    public function postLiveResults();
 }

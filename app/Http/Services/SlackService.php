@@ -108,6 +108,82 @@ class SlackService implements SlackServiceInterface
         }
     }
 
+    public function postLiveResults()
+    {
+        // Fetch live results
+        $url = 'https://api.sportdeer.com/v1/seasons/296/inplay?access_token=' . $this->sportDeerToken;
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = json_decode(curl_exec($ch), true);
+
+        curl_close($ch);
+
+        if (array_get($result, 'status') == 401)
+        {
+            $this->refreshToken();
+        }
+
+        // Post Message to the slack URL
+        $liveResults = json_decode(file_get_contents('app/Http/Services/live-results.json', FILE_USE_INCLUDE_PATH), true);
+
+        if ($inplays = array_get($result, 'docs'))
+        {
+            foreach ($inplays as $inplay)
+            {
+                if (!array_get($liveResults['live'], $inplay['_id']))
+                {
+                    $liveResults['live'][$inplay['_id']] = $inplay;
+                    file_put_contents('app/Http/Services/live-results.json', json_encode($liveResults));
+                }
+
+                $homeScore = $liveResults['live'][$inplay['_id']]['number_goal_team_home'];
+                $awayScore = $liveResults['live'][$inplay['_id']]['number_goal_team_away'];
+
+                $homeTeam = array_get($inplay, 'team_season_home_name');
+                $homeTeamFlag = array_get($this->flags, $homeTeam);
+                $awayTeam = array_get($inplay, 'team_season_away_name');
+                $awayTeamFlag = array_get($this->flags, $awayTeam);
+
+                if ($inplay['number_goal_team_home'] > $homeScore )
+                {
+                    $text = "Goal for $homeTeam $homeTeamFlag !!!";
+                }
+
+                if ($inplay['number_goal_team_away'] > $awayScore)
+                {
+                    $text = "Goal for $awayTeam $awayTeamFlag !!!";
+                }
+
+                if (isset($text))
+                {
+                    $ch = curl_init('https://slack.com/api/chat.postMessage');
+                    $data = http_build_query([
+                        'token' => env('SLACK_TOKEN'),
+                        'channel' => env('SLACK_CHANNEL'),
+                        'text' => $text,
+                        'username' => env('SLACK_USERNAME'),
+                        'icon_url' => env('SLACK_ICON_URL')
+                    ]);
+
+
+                    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                    curl_exec($ch);
+                    curl_close($ch);
+
+                    $liveResults['live'][$inplay['_id']] = $inplay;
+                    file_put_contents('app/Http/Services/live-results.json', json_encode($liveResults));
+                }
+            }
+        }
+    }
+
     /**
      * Refresh SportDeer auth token
      */
