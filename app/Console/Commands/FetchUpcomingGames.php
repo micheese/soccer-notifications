@@ -2,13 +2,13 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Services\SlackServiceInterface;
+use App\Http\Services\ApplicationServiceInterface;
 use Illuminate\Console\Command;
 
 class FetchUpcomingGames extends Command
 {
     /**
-     * @var SlackServiceInterface
+     * @var ApplicationServiceInterface
      */
     private $slackService;
 
@@ -28,9 +28,9 @@ class FetchUpcomingGames extends Command
 
     /**
      * FetchUpcomingGames constructor.
-     * @param SlackServiceInterface $slackService
+     * @param ApplicationServiceInterface $slackService
      */
-    public function __construct(SlackServiceInterface $slackService)
+    public function __construct(ApplicationServiceInterface $slackService)
     {
         $this->slackService = $slackService;
         parent::__construct();

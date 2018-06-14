@@ -2,7 +2,7 @@
 
 namespace App\Http\Services;
 
-class SlackService implements SlackServiceInterface
+class ApplicationService implements ApplicationServiceInterface
 {
     private $flags = [
         'Russia' => ':ru:',
@@ -108,6 +108,9 @@ class SlackService implements SlackServiceInterface
         }
     }
 
+	/**
+	 * @inheritdoc
+	 */
     public function postLiveResults()
     {
         // Fetch live results
@@ -148,14 +151,17 @@ class SlackService implements SlackServiceInterface
                 $awayTeam = array_get($inplay, 'team_season_away_name');
                 $awayTeamFlag = array_get($this->flags, $awayTeam);
 
-                if ($inplay['number_goal_team_home'] > $homeScore )
+                $liveScoreHome = $inplay['number_goal_team_home'];
+                $liveScoreAway = $inplay['number_goal_team_away'];
+
+                if ($liveScoreHome > $homeScore )
                 {
-                    $text = "Goal for $homeTeam $homeTeamFlag !!!";
+                    $text = "Goal for $homeTeam $homeTeamFlag !!! $liveScoreHome $homeTeamFlag : $awayScore $awayTeamFlag";
                 }
 
-                if ($inplay['number_goal_team_away'] > $awayScore)
+                if ($liveScoreAway > $awayScore)
                 {
-                    $text = "Goal for $awayTeam $awayTeamFlag !!!";
+                    $text = "Goal for $awayTeam $awayTeamFlag !!! $liveScoreHome $homeTeamFlag : $awayScore $awayTeamFlag";
                 }
 
                 if (isset($text))
