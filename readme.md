@@ -12,6 +12,10 @@ Feel free to update it to your needs.
  - [ ] Update `.env` with Slack information
  - [ ] Add the following Cron entry to your server : `* * * * * php /path-to-your-project/artisan schedule:run >> /dev/null 2>&1`
  
+ ## Available commands
+ - `php artisan worldcup:live` fetches current games
+ - `php artisan worldcup:daily-schedule` fetches daily schedule
+ 
  ### Notes
  This was a pet project and that code isn't optimized to run on large scale. Take it as is.
  It will be my pleasure to answer any question at `michael.chemani@gmail.com`
