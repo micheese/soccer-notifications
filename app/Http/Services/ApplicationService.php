@@ -154,14 +154,14 @@ class ApplicationService implements ApplicationServiceInterface
                 $liveScoreHome = $inplay['number_goal_team_home'];
                 $liveScoreAway = $inplay['number_goal_team_away'];
 
-                if ($liveScoreHome > $homeScore )
+                if ($liveScoreHome > $homeScore)
                 {
-                    $text = "Goal for $homeTeam $homeTeamFlag !!! $liveScoreHome $homeTeamFlag : $awayScore $awayTeamFlag";
+                    $text = "Goal for $homeTeam $homeTeamFlag !!! $liveScoreHome $homeTeamFlag : $liveScoreAway $awayTeamFlag";
                 }
 
                 if ($liveScoreAway > $awayScore)
                 {
-                    $text = "Goal for $awayTeam $awayTeamFlag !!! $liveScoreHome $homeTeamFlag : $awayScore $awayTeamFlag";
+                    $text = "Goal for $awayTeam $awayTeamFlag !!! $liveScoreHome $homeTeamFlag : $liveScoreAway $awayTeamFlag";
                 }
 
                 if (isset($text))
