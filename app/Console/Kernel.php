@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('worldcup:daily-schedule')->dailyAt('06:00');
+        $schedule->command('worldcup:daily-schedule')->dailyAt('06:00')->timezone('America/New_York');
         $schedule->command('worldcup:live')->everyMinute()->timezone('America/New_York')->between('6:00', '17:00');
     }
 

@@ -63,7 +63,7 @@ class ApplicationService implements ApplicationServiceInterface
         $result = json_decode(curl_exec($ch), true);
 
         curl_close($ch);
-
+        
         if (array_get($result, 'status') == 401)
         {
             $this->refreshToken();
@@ -103,9 +103,9 @@ class ApplicationService implements ApplicationServiceInterface
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_exec($ch);
-                curl_close($ch);
             }
         }
+	    curl_close($ch);
     }
 
 	/**
